@@ -15,7 +15,7 @@ const favoritesSchema = mongoose.Schema({
     },
     properties: {
         type: Object,
-        default: 0
+        required:true
     },
     dateCreated:{
         type:Date,

@@ -31,7 +31,7 @@ const api = process.env.API_URL;
 app.use(`${api}/character`, characterRouter);
 app.use(`${api}/planet`, planetsRouter);
 app.use(`${api}/film`, filmsRouter);
-//app.use(`${api}/favorite`, favoritesRouter); 
+app.use(`${api}/favorite`, favoritesRouter); 
 
 //Conexion con MongoDB
 mongoose.connect(process.env.CONNECTION_STRING)
