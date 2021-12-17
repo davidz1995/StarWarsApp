@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 //Importar routers
-//const usersRouter = require('./routers/users');
+const usersRouter = require('./routers/users');
 const characterRouter = require('./routers/characters');
 const planetsRouter = require('./routers/planets');
 const filmsRouter = require('./routers/films');
@@ -21,13 +21,13 @@ app.options('*', cors());
 //Middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
-//app.use(authJwt());
-//app.use(errorHandler)
+app.use(authJwt());
+app.use(errorHandler)
 
 const api = process.env.API_URL;
 
 //Routers
-//app.use(`${api}/users`, usersRouter);
+app.use(`${api}/users`, usersRouter);
 app.use(`${api}/character`, characterRouter);
 app.use(`${api}/planet`, planetsRouter);
 app.use(`${api}/film`, filmsRouter);
