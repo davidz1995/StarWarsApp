@@ -1,6 +1,4 @@
-import React from 'react'
-//import Form from 'react-bootstrap/Form';
-//import Button from 'react-bootstrap/Button';
+import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 
@@ -41,7 +39,7 @@ function Register() {
             .then(res => {
                 alert(res.data);
             })
-            
+
             setTimeout(() => {
                 setSubmitting(false);
             }, 400);

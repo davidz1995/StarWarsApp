@@ -15,9 +15,8 @@ router.get('/:id',async(req, res) => {
 })
 
 router.post(`/`, async (req, res) =>{
-    let users = await User.find().select('-password');
-    let exist = users.filter(e => e.email === req.body.mail)
-    if(exist.length) {
+    let users = await User.findOne({email:req.body.mail});
+    if(users) {
         res.send('Usuario ya existe.')
     } else {
     let user = new User({
@@ -31,19 +30,23 @@ router.post(`/`, async (req, res) =>{
     })
 
 router.post('/login', async (req, res) => {
-    const logged = await User.findOne({email:req.body.email});
+    const logged = await User.findOne({email:req.body.email})
     const secret = process.env.secret
-    !logged && res.status(400).send('Usuario no encontrado')
-    if(logged && bcrypt.compareSync(req.body.password, logged.password)
+    if(!logged){
+        res.send('Usuario no encontrado')
+    } else {
+        if(logged && bcrypt.compareSync(req.body.password, logged.password)
         ){
         const token = jwt.sign({
             userId:logged.id,
         },secret,{
             expiresIn:'1d'
         })
-        res.status(200).send({user: logged.email, token: token});
-    } else {
-        res.status(400).send('Incorrect password');
+        res.status(200).send(token);
+        } else {
+            res.status(400).send('Incorrect password');
+        }
+
     }
 })
 
