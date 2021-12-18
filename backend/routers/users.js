@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     const logged = await User.findOne({email:req.body.email})
     const secret = process.env.secret
     if(!logged){
-        res.send('Usuario no encontrado')
+        res.status(400).send('Usuario no encontrado')
     } else {
         if(logged && bcrypt.compareSync(req.body.password, logged.password)
         ){
@@ -44,9 +44,8 @@ router.post('/login', async (req, res) => {
         })
         res.status(200).send(token);
         } else {
-            res.status(400).send('Incorrect password');
+            res.send('Contraseña incorrecta.');
         }
-
     }
 })
 

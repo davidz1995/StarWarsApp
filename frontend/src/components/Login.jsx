@@ -31,9 +31,15 @@ function Login() {
                 password:values.password 
             })
             .then(res => {
-                alert(res.data);
+                if(res.data === 'Contraseña incorrecta.') {
+                    alert('Contraseña incorrecta.')
+                } else { 
+                    localStorage.setItem('token', res.data)
+                }
             })
-
+            .catch((e) => {
+                alert('Usuario no encontrado.')
+            })
             setTimeout(() => {
                 setSubmitting(false);
             }, 400);
