@@ -15,14 +15,20 @@ router.get('/:id',async(req, res) => {
 })
 
 router.post(`/`, async (req, res) =>{
+    let users = await User.find().select('-password');
+    let exist = users.filter(e => e.email === req.body.mail)
+    if(exist.length) {
+        res.send('Usuario ya existe.')
+    } else {
     let user = new User({
-        email: req.body.email,
+        email: req.body.mail,
         password: bcrypt.hashSync(req.body.password, 10),
     })
     user = await user.save();
     
-    !user? res.status(400).send('Usuario no creado.'): res.status(200).send(user)
-})
+    !user? res.status(400).send('Usuario no creado.'): res.status(200).send(`Usuario creado.`)
+    }
+    })
 
 router.post('/login', async (req, res) => {
     const logged = await User.findOne({email:req.body.email});
