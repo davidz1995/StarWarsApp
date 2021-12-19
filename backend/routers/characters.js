@@ -10,8 +10,8 @@ router.get('/',async(req, res) => {
         let characters = await axios.get(allCharacters)
         let data = await characters.data
         try {
-            let characterByName = data.results.filter( character => character.name === name? character : null)
-            characterByName? res.status(200).send(characterByName) : res.send(500).send('Character not found.')
+            let characterByName = data.results.filter(character => character.name.toLowerCase() === name.toLowerCase())
+            characterByName.length? res.status(200).send(characterByName) : res.status(400).send('Personaje no encontrado.')
         }
         catch{ error => 
             res.send(error)
