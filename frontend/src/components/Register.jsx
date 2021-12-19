@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 function Register() {
 
@@ -59,6 +60,7 @@ function Register() {
             </Form>
         )}
         </Formik>
+        <Link to='/login'>Tienes una cuenta entra aca</Link>
     </>
     )
 }

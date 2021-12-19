@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
+import {Link} from 'react-router-dom'
 
 function Login() {
     return (
@@ -34,7 +35,8 @@ function Login() {
                 if(res.data === 'Contraseña incorrecta.') {
                     alert('Contraseña incorrecta.')
                 } else { 
-                    localStorage.setItem('token', res.data)
+                    localStorage.setItem('tokenStarwarsApp', res.data)
+                    window.location.href = '/home'
                 }
             })
             .catch((e) => {
@@ -57,6 +59,7 @@ function Login() {
             </Form>
         )}
         </Formik>
+        <Link to='/signin'>No tienes una cuenta? Registrate aca</Link>
     </>
     )
 }
