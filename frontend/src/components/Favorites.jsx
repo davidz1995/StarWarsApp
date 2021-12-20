@@ -21,9 +21,8 @@ function Favorites() {
 
     const handleClickDelete = (e) => {
         axios.delete(`http://localhost:4000/v1/favorite/${e.target.value}`)
-        .then(res => {
-            alert(res.data.message);
-            window.location.href='favorites'
+        .then(() => {
+            GET_FAVORITES()
       })
     }
 
@@ -55,7 +54,10 @@ function Favorites() {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Planeta</th>
+                            <th>Año de nacimiento</th>
                         </tr>
                     </thead>
 
@@ -65,6 +67,9 @@ function Favorites() {
                             <tr key={index}>
                                 <td>{e.id}</td>
                                 <td>{e.name}</td>
+                                <td>{e.description}</td>
+                                <td>{e.planet}</td>
+                                <td>{e.birthYear}</td>
                                 <td><Button variant="danger" value={e._id} onClick={handleClickDelete}>Delete</Button></td>
                             </tr>
                         )})

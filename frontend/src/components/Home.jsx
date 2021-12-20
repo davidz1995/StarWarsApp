@@ -13,44 +13,60 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {Navigate} from 'react-router-dom';
 import axios from 'axios'
+import { getCharactersByFilm } from '../redux/actions/actions';
+import { useDispatch, useSelector } from 'react-redux'
+//import CarouselComponent from './Carousel';
+import '../App.css'
 
 function Home() {
+
+    const dispatch = useDispatch()
 
     const [films, setFilms] = useState([]);
     const [character, setCharacter] = useState('');
     const [foundCharacter, setFoundCharacter] = useState('')
+    const [show, setShow] = useState('carousel')
 
     const GET_PLANETS = () => {
         axios.get(`http://localhost:4000/v1/film`)
         .then(res => {
-        setFilms(res.data.result)
+        setFilms(res.data)
       })
     }
 
     useEffect(() => {
-        GET_PLANETS()
+        GET_PLANETS();
+        //dispatch(getCharactersByFilm(1))
       },[]);
 
     let authorized = localStorage.getItem('tokenStarwarsApp')
 
     const handleSearchCharacter = () => {
+        setShow('loading')
         axios.get(`http://localhost:4000/v1/character?name=${character}`)
             .then(res => {
-                setFoundCharacter(res.data[0])
+                setFoundCharacter(res.data)
+                setShow('completado')
             })
             .catch(res => {
                 alert('Personaje no encontrado.')
+                setShow('carousel')
             })
     }
 
     const handleClickFavorites = () => {
-        axios.post(`http://localhost:4000/v1/favorite`, {id:foundCharacter.uid, name:foundCharacter.name})
+        axios.post(`http://localhost:4000/v1/favorite`, {id:foundCharacter.id, name:foundCharacter.name, planet: foundCharacter.planet ,description:foundCharacter.description, birthYear:foundCharacter.birthYear})
         .then(res => {
             alert(res.data)
         })
         .catch(error => {
             alert(error)
         })
+    }
+
+    const handleClickFilm = (e) => {
+        e.preventDefault();
+        dispatch(getCharactersByFilm(e.target.value))
     }
 
     return (
@@ -72,7 +88,7 @@ function Home() {
                     <NavDropdown title="Peliculas" id="navbarScrollingDropdown">
                     {films && films.length?
                         films.map( (e, index)=> {return (
-                            <NavDropdown.Item key={index} href="#action3" style={{marginBottom:'1em'}}>Title: {e.properties.title}</NavDropdown.Item>
+                            <NavDropdown.Item key={index} style={{marginBottom:'1em'}}><button style={{backgroundColor:'transparent', borderStyle:'hidden'}} value={e.uid} onClick={handleClickFilm} >Título: {e.properties.title}</button></NavDropdown.Item>
                         )
                         })
                         :
@@ -94,7 +110,13 @@ function Home() {
             </Container>
             </Navbar>
 
-            {typeof foundCharacter === 'object'?
+            {show === 'loading'&&
+            <div style={{marginTop:'13em'}}>
+            <div className="lds-facebook"><div></div><div></div><div></div></div>
+            </div>
+            }
+
+            {show === 'completado'&&
             <Container>
                 <Row>
                     <Col style={{textAlign:'-webkit-center', marginTop:'3em', marginBottom:'3em'}}>
@@ -103,23 +125,21 @@ function Home() {
                         <Card.Body>
                             <Card.Title>{foundCharacter.name}</Card.Title>
                             <Card.Text>
-                            Some quick example text to build on the card title and make up the bulk of
-                            the card's content.
+                            {foundCharacter.description}
                             </Card.Text>
                         </Card.Body>
                         <ListGroup className="list-group-flush">
-                            <ListGroupItem>Cras justo odio</ListGroupItem>
-                            <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
-                            <ListGroupItem>Vestibulum at eros</ListGroupItem>
+                            <ListGroupItem>Planeta: {foundCharacter.planet}</ListGroupItem>
+                            <ListGroupItem>Año de nacimiento: {foundCharacter.birthYear}</ListGroupItem>
                         </ListGroup>
-                        <Card.Body>
-                            <Button onClick={handleClickFavorites}>Agregar a favoritos</Button>
+                        <Card.Body style={{display:'flex', flexDirection:'row', heigth:'1em'}}>
+                            <Button variant="outline-primary" style={{marginRight:'1em', fontSize:'.9rem', padding:'.2em'}}>Ver en que peliculas aparece</Button>
+                            <Button variant="outline-primary" style={{fontSize:'.9rem', padding:'.2em'}} onClick={handleClickFavorites}>Agregar a favoritos</Button>
                         </Card.Body>
                     </Card>
                     </Col>
                 </Row>
             </Container>
-                :null
             }
             </div>
             :
