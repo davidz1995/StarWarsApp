@@ -16,7 +16,6 @@ import axios from 'axios'
 import { getCharactersByFilm } from '../redux/actions/actions';
 import { useDispatch, useSelector } from 'react-redux'
 //import CarouselComponent from './Carousel';
-import { store } from '../redux/store'
 import '../App.css'
 
 function Home() {
@@ -26,6 +25,7 @@ function Home() {
     const [films, setFilms] = useState([]);
     const [character, setCharacter] = useState('');
     const [foundCharacter, setFoundCharacter] = useState('');
+    const [moviesByCharacter, setMoviesByCharacter] = useState([])
     const [show, setShow] = useState('carousel');
     //const [refresh, setRefresh] = useState(false);
 
@@ -41,16 +41,6 @@ function Home() {
       },[]);
 
     const characters = useSelector(state => state.charactersByFilms)
-    console.log(characters)
-    
-    /* const executeRefresh = () => {
-        setRefresh(true)
-        setTimeout(() => {
-            setRefresh(false)
-        },1000)
-    }
-
-    store.subscribe(executeRefresh) */
 
     let authorized = localStorage.getItem('tokenStarwarsApp')
 
@@ -80,6 +70,17 @@ function Home() {
     const handleClickFilm = (e) => {
         e.preventDefault();
         dispatch(getCharactersByFilm(e.target.value))
+    }
+
+    const handleShowMovies = (e) => {
+        e.preventDefault();
+        axios.get(`http://localhost:4000/v1/film/characterByFilm/${e.target.value}`)
+        .then(res => {
+            setMoviesByCharacter(res.data)
+        })
+        .catch(error => {
+            alert(error)
+        })
     }
 
     return (
@@ -144,9 +145,19 @@ function Home() {
                         <ListGroup className="list-group-flush">
                             <ListGroupItem>Planeta: {foundCharacter.planet}</ListGroupItem>
                             <ListGroupItem>Año de nacimiento: {foundCharacter.birthYear}</ListGroupItem>
+                            {
+                                moviesByCharacter.length?
+                                <>
+                                <ListGroupItem style={{fontWeight:'bold'}}>Peliculas</ListGroupItem>
+                                {moviesByCharacter.map((e, index) => {return(
+                                    <ListGroupItem key={index}>{e}</ListGroupItem>
+                                )})}
+                                </>
+                                :null
+                            }
                         </ListGroup>
                         <Card.Body style={{display:'flex', flexDirection:'row', heigth:'1em'}}>
-                            <Button variant="outline-primary" style={{marginRight:'1em', fontSize:'.9rem', padding:'.2em'}}>Ver en que peliculas aparece</Button>
+                            <Button variant="outline-primary" style={{marginRight:'1em', fontSize:'.9rem', padding:'.2em'}} value={foundCharacter.id} onClick={handleShowMovies}>Ver en que peliculas aparece</Button>
                             <Button variant="outline-primary" style={{fontSize:'.9rem', padding:'.2em'}} onClick={handleClickFavorites}>Agregar a favoritos</Button>
                         </Card.Body>
                     </Card>

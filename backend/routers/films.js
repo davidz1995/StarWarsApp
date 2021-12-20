@@ -48,7 +48,7 @@ router.get('/characterByFilm/:id',async(req, res) => {
             aux.unshift(e.title)
             return aux
         })
-        
+    
         for (let item of filmDes){
            if(item.some(e => e === selectedURL)){
                acc.push(item[0])
