@@ -16,6 +16,7 @@ import axios from 'axios'
 import { getCharactersByFilm } from '../redux/actions/actions';
 import { useDispatch, useSelector } from 'react-redux'
 //import CarouselComponent from './Carousel';
+import { store } from '../redux/store'
 import '../App.css'
 
 function Home() {
@@ -24,8 +25,9 @@ function Home() {
 
     const [films, setFilms] = useState([]);
     const [character, setCharacter] = useState('');
-    const [foundCharacter, setFoundCharacter] = useState('')
-    const [show, setShow] = useState('carousel')
+    const [foundCharacter, setFoundCharacter] = useState('');
+    const [show, setShow] = useState('carousel');
+    //const [refresh, setRefresh] = useState(false);
 
     const GET_PLANETS = () => {
         axios.get(`http://localhost:4000/v1/film`)
@@ -36,8 +38,19 @@ function Home() {
 
     useEffect(() => {
         GET_PLANETS();
-        //dispatch(getCharactersByFilm(1))
       },[]);
+
+    const characters = useSelector(state => state.charactersByFilms)
+    console.log(characters)
+    
+    /* const executeRefresh = () => {
+        setRefresh(true)
+        setTimeout(() => {
+            setRefresh(false)
+        },1000)
+    }
+
+    store.subscribe(executeRefresh) */
 
     let authorized = localStorage.getItem('tokenStarwarsApp')
 
@@ -88,7 +101,7 @@ function Home() {
                     <NavDropdown title="Peliculas" id="navbarScrollingDropdown">
                     {films && films.length?
                         films.map( (e, index)=> {return (
-                            <NavDropdown.Item key={index} style={{marginBottom:'1em'}}><button style={{backgroundColor:'transparent', borderStyle:'hidden'}} value={e.uid} onClick={handleClickFilm} >Título: {e.properties.title}</button></NavDropdown.Item>
+                            <NavDropdown.Item key={index} style={{marginBottom:'1em'}}><button style={{backgroundColor:'transparent', borderStyle:'hidden', width:'100%', padding:'1em', textAlign:'left'}} value={e.uid} onClick={handleClickFilm} >Título: {e.properties.title}</button></NavDropdown.Item>
                         )
                         })
                         :
