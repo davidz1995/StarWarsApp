@@ -9,14 +9,18 @@ const favoritesSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    /*description: {
+    planet: {
+        type:String,
+        required:true
+    },
+    description: {
         type: String,
         required:true
     },
-    properties: {
+    birthYear: {
         type: Object,
         required:true
-    }, */
+    }, 
     dateCreated:{
         type:Date,
         default: Date.now

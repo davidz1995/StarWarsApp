@@ -24,6 +24,9 @@ router.post('/',async(req, res) => {
         let favorite = new Favorite({
             id:req.body.id,
             name: req.body.name,
+            planet: req.body.planet,
+            description: req.body.description,
+            birthYear:req.body.birthYear
         })
         favorite = await favorite.save();
 
