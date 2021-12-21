@@ -17,8 +17,8 @@ function ListCharactersByFilm() {
             </thead>
             <tbody>
                 {characters && characters.length?
-                    characters.map(e => {return(
-                        <tr>
+                    characters.map((e, index)=> {return(
+                        <tr key={index}>
                             <td>{e.result.uid}</td>
                             <td>{e.result.properties.name}</td>
                             <td>{e.result.properties.gender}</td>

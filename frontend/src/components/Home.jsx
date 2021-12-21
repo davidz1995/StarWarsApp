@@ -16,7 +16,7 @@ import axios from 'axios';
 import { getCharactersByFilm } from '../redux/actions/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import ListCharactersByFilm from './ListCharactersByFilm';
-//import CarouselComponent from './Carousel';
+import CarouselComponent from './Carousel';
 import '../App.css'
 
 function Home() {
@@ -71,8 +71,9 @@ function Home() {
 
     const handleClickFilm = (e) => {
         e.preventDefault();
-        dispatch(getCharactersByFilm(e.target.value))
-        setShowCharacterList(!showCharacterList)
+        dispatch(getCharactersByFilm(e.target.value));
+        setShowCharacterList(!showCharacterList);
+        setShow('');
     }
 
     const handleShowMovies = (e) => {
@@ -128,11 +129,17 @@ function Home() {
             </Navbar>
 
             {showCharacterList && !characters.length?
-                <div className="lds-facebook"><div></div><div></div><div></div></div>
+                <div className="lds-facebook" style={{marginTop:'10em'}}><div></div><div></div><div></div></div>
                 :
                 showCharacterList && characters.length?
                 <ListCharactersByFilm/>
                 :null
+            }
+
+            {show === 'carousel'&&
+                <div style={{height:'90vh'}}>
+                    <CarouselComponent/>
+                </div>
             }
 
             {show === 'loading'&&
