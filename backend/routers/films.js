@@ -9,7 +9,7 @@ router.get('/',async(req, res) => {
     let filmsDB = await Film.find();
     if(filmsDB) {
         let film = filmsDB[0].result.result
-        res.send(film)
+        res.status(200).send(film)
     } else {
         let films = await axios.get(allFilms)
         try{
@@ -18,7 +18,7 @@ router.get('/',async(req, res) => {
             })
             filmsTable = await filmsTable.save();
 
-            !filmsTable? res.status(404).send('No se pudo crear colección films'): res.status(201).send(film); 
+            !filmsTable? res.status(404).send('No se pudo crear colección films'): res.status(201).send(films); 
         }catch(error){
             res.send(error)
         }

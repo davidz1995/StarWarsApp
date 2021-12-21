@@ -21,7 +21,7 @@ app.options('*', cors());
 //Middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
-//app.use(authJwt());
+app.use(authJwt());
 app.use(errorHandler)
 
 const api = process.env.API_URL;
@@ -42,7 +42,4 @@ mongoose.connect(process.env.CONNECTION_STRING)
     console.log(error);
 })
 
-//Inicio de servidor
-app.listen(4000, ()=>{
-    console.log('Server is running in port 4000');
-})
+module.exports = app

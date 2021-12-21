@@ -31,9 +31,14 @@ function Home() {
     const [showCharacterList, setShowCharacterList] = useState(false)
 
     const characters = useSelector(state => state.charactersByFilms)
+    let authorized = localStorage.getItem('tokenStarwarsApp')
 
     const GET_PLANETS = () => {
-        axios.get(`http://localhost:4000/v1/film`)
+        axios.get(`http://localhost:4000/v1/film`,{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
         .then(res => {
         setFilms(res.data)
       })
@@ -43,11 +48,13 @@ function Home() {
         GET_PLANETS();
       },[]);
 
-    let authorized = localStorage.getItem('tokenStarwarsApp')
-
     const handleSearchCharacter = () => {
         setShow('loading')
-        axios.get(`http://localhost:4000/v1/character?name=${character}`)
+        axios.get(`http://localhost:4000/v1/character?name=${character}`,{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
             .then(res => {
                 setFoundCharacter(res.data)
                 setShow('completado')
@@ -60,7 +67,11 @@ function Home() {
     }
 
     const handleClickFavorites = () => {
-        axios.post(`http://localhost:4000/v1/favorite`, {id:foundCharacter.id, name:foundCharacter.name, planet: foundCharacter.planet ,description:foundCharacter.description, birthYear:foundCharacter.birthYear})
+        axios.post(`http://localhost:4000/v1/favorite`, {id:foundCharacter.id, name:foundCharacter.name, planet: foundCharacter.planet ,description:foundCharacter.description, birthYear:foundCharacter.birthYear},{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
         .then(res => {
             alert(res.data)
         })
@@ -71,14 +82,18 @@ function Home() {
 
     const handleClickFilm = (e) => {
         e.preventDefault();
-        dispatch(getCharactersByFilm(e.target.value));
+        dispatch(getCharactersByFilm(e.target.value, authorized));
         setShowCharacterList(!showCharacterList);
         setShow('');
     }
 
     const handleShowMovies = (e) => {
         e.preventDefault();
-        axios.get(`http://localhost:4000/v1/film/characterByFilm/${e.target.value}`)
+        axios.get(`http://localhost:4000/v1/film/characterByFilm/${e.target.value}`,{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
         .then(res => {
             setMoviesByCharacter(res.data)
         })

@@ -13,14 +13,22 @@ function Favorites() {
     let authorized = localStorage.getItem('tokenStarwarsApp')
 
     const GET_FAVORITES = () => {
-        axios.get(`http://localhost:4000/v1/favorite`)
+        axios.get(`http://localhost:4000/v1/favorite`,{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
         .then(res => {
             setFavorites(res.data)
       })
     }
 
     const handleClickDelete = (e) => {
-        axios.delete(`http://localhost:4000/v1/favorite/${e.target.value}`)
+        axios.delete(`http://localhost:4000/v1/favorite/${e.target.value}`,{
+            headers:{
+                Authorization: 'Bearer ' + authorized
+            }
+        })
         .then(() => {
             GET_FAVORITES()
       })

@@ -17,7 +17,7 @@ router.get('/:id',async(req, res) => {
 router.post(`/`, async (req, res) =>{
     let users = await User.findOne({email:req.body.mail});
     if(users) {
-        res.send('Usuario ya existe.')
+        res.send({message:'Usuario ya existe.'})
     } else {
     let user = new User({
         email: req.body.mail,
@@ -25,7 +25,7 @@ router.post(`/`, async (req, res) =>{
     })
     user = await user.save();
     
-    !user? res.status(400).send('Usuario no creado.'): res.status(200).send(`Usuario creado.`)
+    !user? res.status(400).send({message:'Usuario no creado.'}): res.status(200).send({message:`Usuario creado.`})
     }
     })
 
@@ -33,7 +33,7 @@ router.post('/login', async (req, res) => {
     const logged = await User.findOne({email:req.body.email})
     const secret = process.env.secret
     if(!logged){
-        res.status(400).send('Usuario no encontrado')
+        res.status(400).send({message:'Usuario no encontrado'})
     } else {
         if(logged && bcrypt.compareSync(req.body.password, logged.password)
         ){
@@ -42,9 +42,9 @@ router.post('/login', async (req, res) => {
         },secret,{
             expiresIn:'1d'
         })
-        res.status(200).send(token);
+        res.status(200).send({token});
         } else {
-            res.send('Contraseña incorrecta.');
+            res.status(400).send({message:'Contraseña incorrecta.'});
         }
     }
 })

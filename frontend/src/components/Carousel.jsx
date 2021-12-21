@@ -5,7 +5,7 @@ function CarouselComponent() {
     return (
         <div>
             <Carousel>
-                <Carousel.Item interval={3000}>
+                <Carousel.Item interval={900}>
                     <img
                     style={{height:'95vh'}}
                     className="d-block w-100"
@@ -13,7 +13,7 @@ function CarouselComponent() {
                     alt="First slide"
                     />
                 </Carousel.Item>
-                <Carousel.Item interval={3000}>
+                <Carousel.Item interval={900}>
                     <img
                     style={{height:'95vh'}}
                     className="d-block w-100"
@@ -21,7 +21,7 @@ function CarouselComponent() {
                     alt="Second slide"
                     />
                 </Carousel.Item>
-                <Carousel.Item nterval={3000}>
+                <Carousel.Item >
                     <img
                     style={{height:'95vh'}}
                     className="d-block w-100"
