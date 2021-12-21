@@ -21,7 +21,7 @@ app.options('*', cors());
 //Middlewares
 app.use(express.json());
 app.use(morgan('tiny'));
-app.use(authJwt());
+//app.use(authJwt());
 app.use(errorHandler)
 
 const api = process.env.API_URL;
@@ -39,7 +39,7 @@ mongoose.connect(process.env.CONNECTION_STRING)
     console.log('Database connection is ready');
 })
 .catch(()=>{
-    console.log(error);
+    console.log('error');
 })
 
 module.exports = app
