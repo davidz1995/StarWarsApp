@@ -2,13 +2,11 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios')
 const {allFilms} = require ('../utils/constants')
-const {allCharacters} = require ('../utils/constants')
 const { Film } = require ('../models/films')
 const { Character } = require ('../models/characters')
 
 router.get('/',async(req, res) => {
     let filmsDB = await Film.find();
-    let charactersDB = await Character.find();
     if(filmsDB) {
         let film = filmsDB[0].result.result
         res.send(film)
@@ -60,8 +58,6 @@ router.get('/characterByFilm/:id',async(req, res) => {
         res.send(error)
     }
     })
-
-
 
 router.get('/:character',async(req, res) => {
     let id = req.params.character

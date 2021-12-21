@@ -12,9 +12,10 @@ import ListGroupItem from 'react-bootstrap/ListGroupItem';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import {Navigate} from 'react-router-dom';
-import axios from 'axios'
+import axios from 'axios';
 import { getCharactersByFilm } from '../redux/actions/actions';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
+import ListCharactersByFilm from './ListCharactersByFilm';
 //import CarouselComponent from './Carousel';
 import '../App.css'
 
@@ -27,7 +28,9 @@ function Home() {
     const [foundCharacter, setFoundCharacter] = useState('');
     const [moviesByCharacter, setMoviesByCharacter] = useState([])
     const [show, setShow] = useState('carousel');
-    //const [refresh, setRefresh] = useState(false);
+    const [showCharacterList, setShowCharacterList] = useState(false)
+
+    const characters = useSelector(state => state.charactersByFilms)
 
     const GET_PLANETS = () => {
         axios.get(`http://localhost:4000/v1/film`)
@@ -40,8 +43,6 @@ function Home() {
         GET_PLANETS();
       },[]);
 
-    const characters = useSelector(state => state.charactersByFilms)
-
     let authorized = localStorage.getItem('tokenStarwarsApp')
 
     const handleSearchCharacter = () => {
@@ -50,6 +51,7 @@ function Home() {
             .then(res => {
                 setFoundCharacter(res.data)
                 setShow('completado')
+                setShowCharacterList(false)
             })
             .catch(res => {
                 alert('Personaje no encontrado.')
@@ -70,6 +72,7 @@ function Home() {
     const handleClickFilm = (e) => {
         e.preventDefault();
         dispatch(getCharactersByFilm(e.target.value))
+        setShowCharacterList(!showCharacterList)
     }
 
     const handleShowMovies = (e) => {
@@ -102,7 +105,7 @@ function Home() {
                     <NavDropdown title="Peliculas" id="navbarScrollingDropdown">
                     {films && films.length?
                         films.map( (e, index)=> {return (
-                            <NavDropdown.Item key={index} style={{marginBottom:'1em'}}><button style={{backgroundColor:'transparent', borderStyle:'hidden', width:'100%', padding:'1em', textAlign:'left'}} value={e.uid} onClick={handleClickFilm} >Título: {e.properties.title}</button></NavDropdown.Item>
+                            <NavDropdown.Item key={index}><button style={{backgroundColor:'transparent', borderStyle:'hidden', width:'100%', padding:'1em', textAlign:'left'}} value={e.uid} onClick={handleClickFilm} >Título: {e.properties.title}</button></NavDropdown.Item>
                         )
                         })
                         :
@@ -123,6 +126,14 @@ function Home() {
                 </Navbar.Collapse>
             </Container>
             </Navbar>
+
+            {showCharacterList && !characters.length?
+                <div className="lds-facebook"><div></div><div></div><div></div></div>
+                :
+                showCharacterList && characters.length?
+                <ListCharactersByFilm/>
+                :null
+            }
 
             {show === 'loading'&&
             <div style={{marginTop:'13em'}}>
