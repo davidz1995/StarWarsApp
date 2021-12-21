@@ -11,6 +11,4 @@ Proyecto creado con Javascript, React y Node.
 
 - [ ] Tests pueden ser ejecutados con el comendo $ npm run test
 
-- [ ] 
-
 *****Archivo .env en backend no está ignorado en el repositorio para que se pueda hacer la conexión a base de datos.***
