@@ -10,6 +10,6 @@ Proyecto creado con Javascript, React y Node.
 - [ ] Luego ubicarse en la carpeta 'frontend' y ejecutar $ npm start y estaría levantado todo el proyecto.
 
 - [ ] Tests pueden ser ejecutados con el comendo $ npm run test
-- [ ] El proyecto es deployado en este link : https://starwarsapp-davidz1995.vercel.app
+- [ ] El proyecto está deployado en este link : https://starwarsapp-davidz1995.vercel.app
 
 *****Archivo .env en backend no está ignorado en el repositorio para que se pueda hacer la conexión a base de datos.***
